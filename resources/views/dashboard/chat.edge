@@ -1,0 +1,412 @@
+@include('partials/dashheader')
+<link href="/light/styles/apps/mailing-chat.css" rel="stylesheet" type="text/css" />
+<link href="/light/styles/elements/avatar.css" rel="stylesheet" type="text/css" />
+
+<!--  BEGIN CONTENT AREA  -->
+<div id="content" class="main-content">
+  <div class="layout-px-spacing" style="margin-bottom:190px !important;">
+      <div class="chat-section layout-top-spacing">
+        <div class="row">
+          <div class="col text-center">
+            <blockquote class="blockquote">
+              @if(trade.status==='cancelled')
+              Trade status <span class="badge badge-danger">{{trade.status}} </span>
+              @elseif(trade.status=='paid')
+              Trade status <span class="badge badge-info">{{trade.status}} </span>
+              @elseif(trade.status=='disputed')
+              Trade status <span class="badge badge-warning">{{trade.status}} </span>
+              @elseif(trade.status=='completed')
+              Trade status <span class="badge badge-success">{{trade.status}} </span>
+              @else
+              Trade status <span class="badge badge-success">{{trade.status}} </span>
+              @endif
+              @if(trade.status==='cancelled')
+              <div class="alert alert-arrow-left alert-icon-left alert-light-danger mb-4 mt-3"
+                   role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg> ... </svg></button>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <strong>Cancelled:</strong> This trade was cancelled
+              </div>
+              @elseif(trade.status=='completed')
+              <div class="alert alert-arrow-left alert-icon-left alert-light-success mb-4 mt-3"
+                   role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg> ... </svg></button>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <strong>Success:</strong> This trade finished successfully
+              </div>
+              @elseif(trade.status=='paid')
+              <div class="alert alert-arrow-left alert-icon-left alert-light-info mb-4 mt-3"
+                   role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg> ... </svg></button>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <strong>Paid:</strong> This has been marked as paid,The seller should check if payment is received and onced confirmed release the coin
+              </div>
+              @elseif(trade.status=='disputed')
+              <div class="alert alert-arrow-left alert-icon-left alert-light-warning mb-4 mt-3"
+                   role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg> ... </svg></button>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <strong>Disputed:</strong> This trade is under <strong>Dispute</strong> and is on investigation
+              </div>
+              @else
+              <div class="alert alert-arrow-left alert-icon-left alert-light-primary mb-4 mt-3"
+                   role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg> ... </svg></button>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <p><b>{{buyer}}</b> to pay <b>{{amount}}</b> to <b>{{seller}}</b></p> Once the timer stops the trade will be cancelled automatically if the buyer will not have completed the payment.
+              </div>
+              @endif
+
+              @if(trade.status==='active')
+              <div class="container mt-3">
+              <div id="cd-circle">
+
+              </div>
+                @endif
+              </div>
+            </blockquote>
+          <div class="col-xl-12 col-lg-12 col-md-12">
+            <input class="d-none" id="token" value="{{id}}">
+            <div class="chat-system">
+              <div class="chat-box" style="height: calc(100vh - 203px)">
+                <div class="overlay-phone-call">
+                  <div class="">
+                    <div class="calling-user-info">
+                      <div class="">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left-circle go-back-chat"><circle cx="12" cy="12" r="10"></circle><polyline points="12 8 8 12 12 16"></polyline><line x1="16" y1="12" x2="8" y2="12"></line></svg>
+                        <span class="user-name"></span>
+                        <span class="call-status">Calling...</span>
+                      </div>
+                    </div>
+
+                    <div class="calling-user-img">
+                      <div class="">
+                        <img src="assets/img/90x90.jpg" alt="dynamic-image">
+                      </div>
+
+                      <div class="timer"><label class="minutes">00</label> : <label class="seconds">00</label></div>
+                    </div>
+
+                    <div class="calling-options">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-video switch-to-video-call"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mic switch-to-microphone"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus add-more-caller"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone-off cancel-call"><path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.42 19.42 0 0 1-3.33-2.67m-2.67-3.34a19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91"></path><line x1="23" y1="1" x2="1" y2="23"></line></svg>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="overlay-video-call">
+                  <img src="assets/img/175x115.jpg" class="video-caller" alt="video-chat">
+                  <div class="">
+                    <div class="calling-user-info">
+                      <div class="d-flex">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left-circle go-back-chat"><circle cx="12" cy="12" r="10"></circle><polyline points="12 8 8 12 12 16"></polyline><line x1="16" y1="12" x2="8" y2="12"></line></svg>
+                        <div class="">
+                          <span class="user-name"></span>
+                          <div class="timer"><label class="minutes">00</label> : <label class="seconds">00</label></div>
+                        </div>
+                        <span class="call-status">Calling...</span>
+                      </div>
+                    </div>
+
+                    <div class="calling-user-img">
+                      <div class="">
+                        <img src="assets/img/90x90.jpg" alt="dynamic-image">
+                      </div>
+
+                    </div>
+                    <div class="calling-options">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone switch-to-phone-call"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mic switch-to-microphone"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus add-more-caller"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-video-off cancel-call"><path d="M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2m5.66 0H14a2 2 0 0 1 2 2v3.34l1 1L23 7v10"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="chat-box-inner" style="height:100%">
+                  <div class="chat-meta-user chat-active">
+                    <div class="current-chat-user-name"><span><img src="/images/chat.png" alt="dynamic-image">
+                       @if(owner)
+                      <span class="name">{{buyer}}</span>
+                      <input class="d-none" id="real_me" value="{{seller}}">
+                      @else
+                       <span class="name">{{seller}}</span>
+                      <input class="d-none" id="real_me" value="{{buyer}}">
+                      @endif
+                    </span>
+                    </div>
+
+                    <div class="chat-action-btn align-self-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone  phone-call-screen"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-video video-call-screen"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+                      <div class="dropdown d-inline-block">
+                        <a class="dropdown-toggle " href="#" role="button" id="dropdownMenuLink-2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-circle"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></a>
+
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-2">
+                         <a class="dropdown-item" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg> Mail</a>
+                          <a class="dropdown-item" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy</a>
+                          <a class="dropdown-item" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg> Delete</a>
+                          <a class="dropdown-item" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-share-2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg> Share</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="chat-conversation-box chat-active">
+                    <div id="chat-conversation-box-scroll" class="chat-conversation-box-scroll">
+                      @if(chat.length!==0)
+                      <div class="chat active-chat" data-chat="person6">
+                        <div class="conversation-start">
+                          <span>{{chat_start}}</span>
+                        </div>
+                        @each(chats in chat)
+                        @if(chats.user===me)
+                        <div class="bubble me">
+                          {{chats.messages}}
+                        </div>
+                        @else
+                        <div class="bubble you">
+                          {{chats.messages}}
+                        </div>
+                        @endif
+                        @endeach
+                      </div>
+                      @else
+                      <div class="chat active-chat" data-chat="person6">
+                      <div class="conversation-start">
+                        <span>No data</span>
+                      </div>
+                      </div>
+                      @endif
+
+                    </div>
+                  </div>
+                  <div class="chat-footer chat-active">
+
+                    <!-- disable chat input-->
+                    @if(trade.status=='cancelled'||trade.status=='disputed'||trade.status=='completed')
+                    <div class="input-group mb-4 ">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-square"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+                      </div>
+                      <input type="text" class="form-control message" placeholder="message" disabled>
+                      <div class="input-group-append">
+                        <button class="btn btn-primary" type="button" disabled><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Send</button>
+                      </div>
+                    </div>
+                    @else
+                    <div class="input-group mb-4 " id="send">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-square"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+                      </div>
+                      <input type="text" class="form-control message" placeholder="message">
+                      <div class="input-group-append">
+                        <button class="btn btn-primary" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Send</button>
+                      </div>
+                    </div>
+                    @endif
+
+                    <div class="col mt-5" id="trade_actions">
+                      @if(trade.status==='cancelled')
+
+                      @elseif(trade.status==='disputed')
+
+                      @elseif(trade.status==='completed')
+
+                      @else
+                      @if(owner)
+                      <button class="btn btn-success mb-2 btn-rounded btn-block mr-2" data-toggle="modal" data-target="#releaseModal"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Release coin</button>
+                      <button class="btn btn-outline-warning mb-2 btn-rounded btn-block mr-2"  data-toggle="modal" data-target="#standardModal"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><style>.fa-secondary{opacity:.4}</style></defs><path d="M442.75 182.39L329.61 295.53 290 255.93l-81 81L175 303l81-81-39.6-39.6L329.61 69.26z" class="fa-secondary"/><path d="M169 297.37a31.9 31.9 0 0 0-45.16 0L9.35 412.12a32 32 0 0 0 0 45.25l45.17 45.26a31.91 31.91 0 0 0 45.17 0l114.52-114.75a32 32 0 0 0 0-45.25zm7.49-109.32a23.92 23.92 0 0 0 33.87 0L334.61 63.6a24 24 0 0 0 0-33.94L312 7a23.93 23.93 0 0 0-33.88 0L153.94 131.48a24 24 0 0 0 0 33.94zM504 199.36l-22.6-22.62a23.9 23.9 0 0 0-33.87 0L323.32 301.19a24 24 0 0 0 0 33.94l22.58 22.62a23.91 23.91 0 0 0 33.88 0L504 233.3a24 24 0 0 0 0-33.94z" class="fa-primary"/></svg> Dispute</button>
+                      @else
+                      @if(trade.status==='paid')
+                      <button class="btn btn-secondary mb-2 btn-rounded btn-block mr-2" data-toggle="modal" data-target="#slideupModal" disabled><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check"><polyline points="20 6 9 17 4 12"/></svg> Mark as paid</button>
+                      <button class="btn btn-outline-danger mb-2 btn-rounded btn-block mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Cancel trade</button>
+                      @else
+                      <button class="btn btn-secondary mb-2 btn-rounded btn-block mr-2" data-toggle="modal" data-target="#slideupModal"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check"><polyline points="20 6 9 17 4 12"/></svg> Mark as paid</button>
+                      <button class="btn btn-outline-danger mb-2 btn-rounded btn-block mr-2" onclick="cancel('{{id}}','{{ csrfToken }}','{{me}}')"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Cancel trade</button>
+                      @endif
+                      @endif
+                      @endif
+                    </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+          </div>
+        </div>
+</div>
+
+
+    <!---mark-->
+    <div id="slideupModal" class="modal animated slideInUp custo-slideInUp" role="dialog">
+      <div class="modal-dialog">
+        <!-- confirm payment-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Confirm</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p class="modal-text">Please confirm that you have already paid the seller, otherwise there will be no refunds if you accept this.</p>
+          </div>
+          <div class="modal-footer md-button">
+            <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
+            <button type="button" class="btn btn-success" onclick="confirmtrade('{{id}}','{{ csrfToken }}')">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- dispute modal -->
+    <div class="modal fade modal-notification zoomInUp" id="standardModal" tabindex="-1" aria-labelledby="standardModalLabel" style="display: none;" aria-hidden="true">
+      <div class="modal-dialog" role="document" id="standardModalLabel">
+        <div class="modal-content">
+          <div class="modal-body text-center">
+            <div class="icon-content">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-triangle"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </div>
+            <p class="modal-text">Are you sure you want to report and dispute this trade.Admins will investigate and will have the final order</p>
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
+            <button type="button" class="btn btn-primary" onclick="dispute('{{id}}','{{ csrfToken }}','{{me}}')">confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- relesase coin -->
+    <div class="modal fade modal-notification zoomInUp" id="releaseModal" tabindex="-1" aria-labelledby="standardModalLabel" style="display: none;" aria-hidden="true">
+      <div class="modal-dialog" role="document" id="standardModalLabel">
+        <div class="modal-content">
+          <div class="modal-body text-center">
+            <div class="icon-content">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-triangle"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <p class="modal-text">Please confirm that you have received payment before releasing the coin as there will be no refunds</p>
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
+            <button type="button" class="btn btn-primary" onclick="release('{{id}}','{{ csrfToken }}','{{buyer}}')">confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--ratings-->
+    @if(owner)
+    <div class="modal fade" id="ratingsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Rate</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+               </button>
+          </div>
+          <div class="modal-body">
+            <p class="modal-text">please rate {{buyer}} and leave feedback</p>
+            <form id="rates">
+              {{ csrfField() }}
+              <input type="text" value="{{id}}" class="d-none" name="id">
+              <input type="text" value="{{buyer}}" class="d-none" name="user">
+              <div class="form-group mb-4">
+                <label for="ratings">Your rating</label>
+                <input type="hidden" class="rating" data-filled="fa fa-star red" data-empty="far fa-star"/>
+              </div>
+              <label>Feedback</label>
+              <textarea class="form-control" rows="4" cols="6"></textarea>
+            </form>
+            </div>
+          <div class="modal-footer">
+            <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
+            <button type="button" class="btn btn-primary" onclick="ratings('{{id}}')">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    @else
+    <div class="modal fade" id="ratingsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Rate</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p class="modal-text">please rate {{seller}} and leave feedback</p>
+            <form id="rates">
+              {{ csrfField() }}
+              <input type="text" value="{{id}}" class="d-none" name="id">
+              <input type="text" value="{{seller}}" class="d-none" name="user">
+              <div class="form-group mb-4">
+                <label for="ratings">Your rating</label>
+                <input type="hidden" class="rating" data-filled="fa fa-star red" data-empty="far fa-star" name="rating"/>
+              </div>
+              <label>Feedback</label>
+              <textarea class="form-control" rows="4" cols="6" name="feedback"></textarea>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
+            <button type="button" class="btn btn-primary" onclick="ratings('{{id}}')">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    @endif
+
+    </div>
+
+  @include('partials/dashfooter')
+
+
+  <!--timer-->
+  <script>
+    $('#cd-circle').countdown(Date.parse('{{time}}'), function(event) {
+      $(this).html(event.strftime(''+
+        '<div class="countdown">'+
+        '<div class="clock-count-container">'+
+        '<h1 class="clock-val">%H</h1>'+
+        '</div>'+
+        '<h4 class="clock-text"> Hours </h4>'+
+        '</div>'+
+        '<div class="countdown">'+
+        '<div class="clock-count-container">'+
+        '<h1 class="clock-val">%M</h1>'+
+        '</div>'+
+        '<h4 class="clock-text"> Mins </h4>'+
+        '</div>'+
+        '<div class="countdown">'+
+        '<div class="clock-count-container">'+
+        '<h1 class="clock-val">%S</h1>'+
+        '</div>'+
+        '<h4 class="clock-text"> Sec </h4>'+
+        '</div>'));
+    }).on('finish.countdown', function() {
+      ////we end the trade
+      const tk=$('#token').val()
+      ws.getSubscription('trade:'+tk).emit('message',{
+        msg:'cancelled',
+        token:$('#token').val()
+      })
+    });
+  </script>
+  <script src="/form/chat.js"></script>
+  <script>
+    ws.on('open', () => {
+      isConnected = true
+      subscribeToChannel()
+      subscribeToTrade()
+    })
+  </script>
+    </div>
